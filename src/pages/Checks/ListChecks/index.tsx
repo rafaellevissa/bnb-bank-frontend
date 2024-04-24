@@ -18,6 +18,7 @@ import { Check } from "../../../store/modules/check/types";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import { Link } from "react-router-dom";
 
 export const ListChecksPage = () => {
   const dispatch = useDispatch();
@@ -82,9 +83,11 @@ export const ListChecksPage = () => {
           zIndex: "1000",
         }}
       >
-        <Fab color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
+        <Link to="/new-check">
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Link>
       </div>
     </Layout>
   );

@@ -28,8 +28,6 @@ export const ListTransactionsPage = () => {
     dispatch(list());
   }, []);
 
-  console.log(item?.transactions);
-
   return (
     <Layout>
       <Box

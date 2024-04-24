@@ -14,6 +14,7 @@ import Layout from "../../../layouts/dashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { list } from "../../../store/modules/purchase/actions";
 import { Purchase } from "../../../store/modules/purchase/types";
+import { Link } from "react-router-dom";
 
 export const ListPurchasesPage = () => {
   const dispatch = useDispatch();
@@ -61,9 +62,11 @@ export const ListPurchasesPage = () => {
           zIndex: "1000",
         }}
       >
-        <Fab color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
+        <Link to="/new-purchase">
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        </Link>
       </div>
     </Layout>
   );
