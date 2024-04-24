@@ -1,5 +1,5 @@
 import { Divider, List, Toolbar, Typography } from "@mui/material";
-import { Group } from "@mui/icons-material";
+import { Balance, Savings, ShoppingBasket } from "@mui/icons-material";
 import ListItemLink from "../../ListItemLink";
 import LogOut from "../Logout";
 
@@ -16,17 +16,17 @@ export default function SideBar(props: DrawerProps) {
       </Toolbar>
       <Divider />
       <List>
-        <ListItemLink to="/" primary="Balance" icon={<Group />} isCollapsed />
+        <ListItemLink to="/" primary="Balance" icon={<Balance />} isCollapsed />
         <ListItemLink
           to="/purchases"
           primary="Expenses"
-          icon={<Group />}
+          icon={<ShoppingBasket />}
           isCollapsed
         />
         <ListItemLink
           to="/checks"
           primary="Checks"
-          icon={<Group />}
+          icon={<Savings />}
           isCollapsed
         />
       </List>

@@ -8,6 +8,8 @@ import {
   ListSubheader,
   ListItemButton,
   ListItemText,
+  Grid,
+  ListItem,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { list } from "../../../store/modules/transaction/actions";
 import { Transaction } from "../../../store/modules/transaction/types";
 import { fDate } from "../../../utils/date";
+import { Link } from "react-router-dom";
 
 export const ListTransactionsPage = () => {
   const dispatch = useDispatch();
@@ -28,6 +31,56 @@ export const ListTransactionsPage = () => {
   useEffect(() => {
     dispatch(list());
   }, []);
+
+  const NotFound = () => {
+    return (
+      <Grid container justifyContent="center" p={2}>
+        <Grid item>
+          <Box>
+            <ListItem>
+              <ListItemText primary="No Records Found" />
+            </ListItem>
+          </Box>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const Transactions = () => {
+    if (!item?.transactions) {
+      return <NotFound />;
+    }
+
+    return item?.transactions?.map((transaction: Transaction) => (
+      <>
+        <Divider />
+        <ListItemButton>
+          <ListItemText
+            primary={transaction.description}
+            secondary={fDate(transaction.created_at)}
+          />
+          <ListItemText
+            secondary={
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: "bold",
+                  color: transaction.type === "incoming" ? "black" : "red",
+                }}
+              >
+                $
+                {transaction.type === "incoming"
+                  ? transaction.amount
+                  : -transaction.amount}
+              </Typography>
+            }
+            sx={{ textAlign: "right" }}
+          />
+        </ListItemButton>
+        <Divider />
+      </>
+    ));
+  };
 
   return (
     <Layout>
@@ -80,9 +133,11 @@ export const ListTransactionsPage = () => {
               alignItems: "center",
             }}
           >
-            <IconButton>
-              <AddIcon />
-            </IconButton>
+            <Link to="/new-check">
+              <IconButton>
+                <AddIcon />
+              </IconButton>
+            </Link>
             <Typography variant="subtitle1">Deposit a Check</Typography>
           </Box>
         </Box>
@@ -108,9 +163,11 @@ export const ListTransactionsPage = () => {
               alignItems: "center",
             }}
           >
-            <IconButton>
-              <AddIcon />
-            </IconButton>
+            <Link to="/new-purchase">
+              <IconButton>
+                <AddIcon />
+              </IconButton>
+            </Link>
             <Typography variant="subtitle1">Purchase</Typography>
           </Box>
         </Box>
@@ -123,37 +180,7 @@ export const ListTransactionsPage = () => {
           </ListSubheader>
         }
       >
-        {Array.isArray(item) ||
-          item?.transactions?.map((transaction: Transaction) => (
-            <>
-              <Divider />
-              <ListItemButton>
-                <ListItemText
-                  primary={transaction.description}
-                  secondary={fDate(transaction.created_at)}
-                />
-                <ListItemText
-                  secondary={
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        fontWeight: "bold",
-                        color:
-                          transaction.type === "incoming" ? "black" : "red",
-                      }}
-                    >
-                      $
-                      {transaction.type === "incoming"
-                        ? transaction.amount
-                        : -transaction.amount}
-                    </Typography>
-                  }
-                  sx={{ textAlign: "right" }}
-                />
-              </ListItemButton>
-              <Divider />
-            </>
-          ))}
+        <Transactions />
       </List>
       {/* <Snackbar open={error} autoHideDuration={300}>
         <Alert severity="error" sx={{ width: "100%" }}>
