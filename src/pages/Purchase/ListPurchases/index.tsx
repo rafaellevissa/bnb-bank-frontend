@@ -7,6 +7,8 @@ import {
   ListItemText,
   Fab,
   Box,
+  ListItem,
+  Grid,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Layout from "../../../layouts/dashboard";
@@ -15,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { list } from "../../../store/modules/purchase/actions";
 import { Purchase } from "../../../store/modules/purchase/types";
 import { Link } from "react-router-dom";
+import { fDate } from "../../../utils/date";
 
 export const ListPurchasesPage = () => {
   const dispatch = useDispatch();
@@ -26,8 +29,8 @@ export const ListPurchasesPage = () => {
     dispatch(list());
   }, []);
 
-  return (
-    <Layout>
+  const Purchases = () => {
+    return (
       <List>
         {item?.map((purchase: Purchase, index: number) => (
           <Box key={index}>
@@ -35,7 +38,7 @@ export const ListPurchasesPage = () => {
             <ListItemButton>
               <ListItemText
                 primary={purchase.description}
-                secondary="2024-04-21"
+                secondary={fDate(purchase.created_at)}
               />
               <ListItemText
                 secondary={
@@ -53,6 +56,28 @@ export const ListPurchasesPage = () => {
           </Box>
         ))}
       </List>
+    );
+  };
+
+  const NotFound = () => {
+    return (
+      <Grid container justifyContent="center" p={2}>
+        <Grid item>
+          <Box>
+            <ListItem>
+              <ListItemText primary="No Records Found" />
+            </ListItem>
+          </Box>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  return (
+    <Layout>
+      {!item?.length && <NotFound />}
+
+      {!!item?.length && <Purchases />}
 
       <div
         style={{
@@ -63,7 +88,7 @@ export const ListPurchasesPage = () => {
         }}
       >
         <Link to="/new-purchase">
-          <Fab color="primary" aria-label="add">
+          <Fab color="primary">
             <AddIcon />
           </Fab>
         </Link>

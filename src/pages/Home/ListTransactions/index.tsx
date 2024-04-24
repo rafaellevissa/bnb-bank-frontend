@@ -17,6 +17,7 @@ import Layout from "../../../layouts/dashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { list } from "../../../store/modules/transaction/actions";
 import { Transaction } from "../../../store/modules/transaction/types";
+import { fDate } from "../../../utils/date";
 
 export const ListTransactionsPage = () => {
   const dispatch = useDispatch();
@@ -129,7 +130,7 @@ export const ListTransactionsPage = () => {
               <ListItemButton>
                 <ListItemText
                   primary={transaction.description}
-                  secondary="2024-04-21"
+                  secondary={fDate(transaction.created_at)}
                 />
                 <ListItemText
                   secondary={

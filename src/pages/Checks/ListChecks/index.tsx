@@ -8,6 +8,8 @@ import {
   Fab,
   Box,
   Tab,
+  Grid,
+  ListItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Layout from "../../../layouts/dashboard";
@@ -19,6 +21,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Link } from "react-router-dom";
+import { fDate } from "../../../utils/date";
 
 export const ListChecksPage = () => {
   const dispatch = useDispatch();
@@ -33,32 +36,52 @@ export const ListChecksPage = () => {
     dispatch(list());
   }, []);
 
-  const getTabByStatus = (status: string) => (
-    <List>
-      {item
-        ?.filter((check: Check) => check.status === status)
-        .map((check: Check, index: number) => (
-          <Box key={index}>
-            <Divider />
-            <ListItemButton>
-              <ListItemText
-                primary={check.description}
-                secondary="2024-04-21"
-              />
-              <ListItemText
-                secondary={
-                  <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                    ${check.amount}
-                  </Typography>
-                }
-                sx={{ textAlign: "right" }}
-              />
-            </ListItemButton>
-            <Divider />
+  const NotFound = () => {
+    return (
+      <Grid container justifyContent="center" p={2}>
+        <Grid item>
+          <Box>
+            <ListItem>
+              <ListItemText primary="No Records Found" />
+            </ListItem>
           </Box>
-        ))}
-    </List>
-  );
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const getTabByStatus = (status: string) => {
+    if (!item?.length) {
+      return <NotFound />;
+    }
+
+    return (
+      <List>
+        {item
+          ?.filter((check: Check) => check.status === status)
+          .map((check: Check, index: number) => (
+            <Box key={index}>
+              <Divider />
+              <ListItemButton>
+                <ListItemText
+                  primary={check.description}
+                  secondary={fDate(check.created_at)}
+                />
+                <ListItemText
+                  secondary={
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                      ${check.amount}
+                    </Typography>
+                  }
+                  sx={{ textAlign: "right" }}
+                />
+              </ListItemButton>
+              <Divider />
+            </Box>
+          ))}
+      </List>
+    );
+  };
 
   return (
     <Layout>
