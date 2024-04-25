@@ -5,6 +5,7 @@ import { store } from "../store";
 import { SignupPage } from "../pages/Auth/Signup";
 import { FormPurchasesPage, ListPurchasesPage } from "../pages/Purchase";
 import { FormCheckPage, ListChecksPage } from "../pages/Checks";
+import { ListChecksControlPage } from "../pages/Checks/ListChecksControl";
 
 const AppRoutes = () => {
   const storage = store.getState();
@@ -50,6 +51,12 @@ const AppRoutes = () => {
         <Route
           path="/new-check"
           element={loggedIn ? <FormCheckPage /> : <Navigate replace to="/" />}
+        />
+        <Route
+          path="/checks-control"
+          element={
+            loggedIn ? <ListChecksControlPage /> : <Navigate replace to="/" />
+          }
         />
       </Routes>
     </BrowserRouter>

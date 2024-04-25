@@ -3,6 +3,10 @@ export interface ActionTypesBase {
   CHECK_LIST_SUCCESS: string;
   CHECK_LIST_FAILURE: string;
 
+  CHECK_LIST_CONTROL_REQUEST: string;
+  CHECK_LIST_CONTROL_SUCCESS: string;
+  CHECK_LIST_CONTROL_FAILURE: string;
+
   CHECK_DEPOSIT_REQUEST: string;
   CHECK_DEPOSIT_SUCCESS: string;
   CHECK_DEPOSIT_FAILURE: string;

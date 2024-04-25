@@ -1,6 +1,7 @@
-import { list, store } from "./actions";
+import { list, store, listControl } from "./actions";
 
 export default {
   list,
+  listControl,
   store,
 };
