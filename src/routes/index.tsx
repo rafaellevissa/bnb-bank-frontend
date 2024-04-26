@@ -60,7 +60,7 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/checks-approve"
+          path="/checks-approve/:id"
           element={
             loggedIn ? <ChecksApprovePage /> : <Navigate replace to="/" />
           }

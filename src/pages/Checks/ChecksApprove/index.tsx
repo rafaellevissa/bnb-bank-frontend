@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Typography,
   Button,
@@ -20,6 +20,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { find } from "../../../store/modules/check/actions";
 
 const data = [
   {
@@ -58,86 +61,104 @@ const ActionButton = styled(Button)<ActionButtonProps>`
 `;
 
 export function ChecksApprovePage() {
-  const id = "1";
+  const params = useParams();
 
-  const selectedItem = data.find((item) => item.id === parseInt(id));
+  const dispatch = useDispatch();
+  const { item, error, loading } = useSelector<any, any>((item) => item.check);
 
-  if (!selectedItem) {
-    return <Typography variant="h6">Item not found!</Typography>;
-  }
+  useEffect(() => {
+    dispatch(find(params.id ?? ""));
+  }, [params]);
 
-  const { customer, customerEmail, account, reportedAmount, image } =
-    selectedItem;
+  const NotFound = () => {
+    return (
+      <Grid container justifyContent="center" p={2}>
+        <Grid item>
+          <Box>
+            <ListItem>
+              <ListItemText primary="Item not Found" />
+            </ListItem>
+          </Box>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  console.log(item);
 
   return (
     <Layout>
-      <UserDetailsContainer>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>
-                  {customer}
-                </Typography>
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <PersonIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={`Customer: ${customer}`} />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <EmailIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={`Customer Email: ${customerEmail}`}
+      {!item && <NotFound />}
+
+      {item && (
+        <UserDetailsContainer>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>
+                    {item?.user?.name}
+                  </Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemIcon>
+                        <PersonIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={`Customer: ${item?.user?.name}`} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <EmailIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={`Customer Email: ${item?.user?.email}`}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <AccountCircleIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={`Account: ${item?.user?.id}`} />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <MonetizationOnIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={`Reported Amount: ${item?.amount}`}
+                      />
+                    </ListItem>
+                  </List>
+                  <Box mt={2} mb={2}>
+                    <img
+                      src={`data:image/png;base64, ${item?.pictureBase64}`}
+                      width={500}
+                      height={200}
                     />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AccountCircleIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={`Account: ${account}`} />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <MonetizationOnIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={`Reported Amount: ${reportedAmount}`}
-                    />
-                  </ListItem>
-                </List>
-                <Box mt={2} mb={2}>
-                  <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt4D-WMxOXg_-sTs7LpoLrJp7Z4GxV03_H1MxeOdMOyg&s"
-                    width={500}
-                    height={200}
-                  />
-                </Box>
-                <Divider style={{ margin: "20px 0" }} />
-                <div>
-                  <ActionButton
-                    variant="contained"
-                    reject
-                    startIcon={<CancelOutlinedIcon />}
-                  >
-                    Reject
-                  </ActionButton>
-                  <ActionButton
-                    variant="contained"
-                    color="primary"
-                    startIcon={<CheckCircleOutlineIcon />}
-                  >
-                    Accept
-                  </ActionButton>
-                </div>
-              </CardContent>
-            </Card>
+                  </Box>
+                  <Divider style={{ margin: "20px 0" }} />
+                  <div>
+                    <ActionButton
+                      variant="contained"
+                      reject
+                      startIcon={<CancelOutlinedIcon />}
+                    >
+                      Reject
+                    </ActionButton>
+                    <ActionButton
+                      variant="contained"
+                      color="primary"
+                      startIcon={<CheckCircleOutlineIcon />}
+                    >
+                      Accept
+                    </ActionButton>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>
-      </UserDetailsContainer>
+        </UserDetailsContainer>
+      )}
     </Layout>
   );
 }
