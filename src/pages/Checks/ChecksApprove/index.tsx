@@ -22,26 +22,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { find } from "../../../store/modules/check/actions";
-
-const data = [
-  {
-    id: 1,
-    customer: "John Doe",
-    customerEmail: "john@example.com",
-    account: "123456",
-    reportedAmount: "$100",
-    image: "https://via.placeholder.com/50",
-  },
-  {
-    id: 2,
-    customer: "Jane Smith",
-    customerEmail: "jane@example.com",
-    account: "654321",
-    reportedAmount: "$200",
-    image: "https://via.placeholder.com/50",
-  },
-];
+import { find, update } from "../../../store/modules/check/actions";
 
 const UserDetailsContainer = styled(Box)`
   padding: 20px;
@@ -70,6 +51,18 @@ export function ChecksApprovePage() {
     dispatch(find(params.id ?? ""));
   }, [params]);
 
+  const handleRejectButton = () => {
+    if (params.id) {
+      dispatch(update({ id: parseInt(params.id), status: "rejected" }));
+    }
+  };
+
+  const handleAcceptButton = () => {
+    if (params.id) {
+      dispatch(update({ id: parseInt(params.id), status: "accepted" }));
+    }
+  };
+
   const NotFound = () => {
     return (
       <Grid container justifyContent="center" p={2}>
@@ -83,8 +76,6 @@ export function ChecksApprovePage() {
       </Grid>
     );
   };
-
-  console.log(item);
 
   return (
     <Layout>
@@ -139,6 +130,7 @@ export function ChecksApprovePage() {
                   <Divider style={{ margin: "20px 0" }} />
                   <div>
                     <ActionButton
+                      onClick={handleRejectButton}
                       variant="contained"
                       reject
                       startIcon={<CancelOutlinedIcon />}
@@ -146,6 +138,7 @@ export function ChecksApprovePage() {
                       Reject
                     </ActionButton>
                     <ActionButton
+                      onClick={handleAcceptButton}
                       variant="contained"
                       color="primary"
                       startIcon={<CheckCircleOutlineIcon />}

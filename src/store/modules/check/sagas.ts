@@ -100,9 +100,34 @@ export function* store({ payload }: Action): Generator {
   }
 }
 
+export function* update({ payload }: Action): Generator {
+  try {
+    const url = `/api/admin/checks/${payload.id}`;
+
+    const response: unknown = yield call(api.put, url, payload);
+
+    const { data, status } = response as AxiosResponse<Check>;
+
+    if (status !== 200) {
+      throw response;
+    }
+
+    yield put({
+      type: ActionTypes.CHECK_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (failed) {
+    yield put({
+      type: ActionTypes.CHECK_UPDATE_FAILURE,
+      payload: null,
+    });
+  }
+}
+
 export default all([
   takeLatest(ActionTypes.CHECK_LIST_REQUEST, list),
   takeLatest(ActionTypes.CHECK_FIND_REQUEST, find),
   takeLatest(ActionTypes.CHECK_LIST_CONTROL_REQUEST, listControl),
   takeLatest(ActionTypes.CHECK_DEPOSIT_REQUEST, store),
+  takeLatest(ActionTypes.CHECK_UPDATE_REQUEST, update),
 ]);

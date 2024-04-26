@@ -1,3 +1,7 @@
+type OptionalProps<T> = {
+  [P in keyof T]?: T[P];
+};
+
 export interface ActionTypesBase {
   CHECK_LIST_REQUEST: string;
   CHECK_LIST_SUCCESS: string;
@@ -14,6 +18,10 @@ export interface ActionTypesBase {
   CHECK_DEPOSIT_REQUEST: string;
   CHECK_DEPOSIT_SUCCESS: string;
   CHECK_DEPOSIT_FAILURE: string;
+
+  CHECK_UPDATE_REQUEST: string;
+  CHECK_UPDATE_SUCCESS: string;
+  CHECK_UPDATE_FAILURE: string;
 }
 
 export interface Check {
@@ -27,6 +35,8 @@ export interface Check {
   created_at?: string;
   updated_at?: string;
 }
+
+export type UpdateCheck = OptionalProps<Check>;
 
 export interface StateBase {
   item: string | Check | Check[] | null;
