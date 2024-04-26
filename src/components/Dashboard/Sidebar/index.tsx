@@ -29,6 +29,12 @@ export default function SideBar(props: DrawerProps) {
           icon={<Savings />}
           isCollapsed
         />
+        <ListItemLink
+          to="/checks-control"
+          primary="Checks"
+          icon={<Savings />}
+          isCollapsed
+        />
       </List>
       <Divider />
       <Toolbar sx={{ flexGrow: 1 }} />

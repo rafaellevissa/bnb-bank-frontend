@@ -6,6 +6,7 @@ import { SignupPage } from "../pages/Auth/Signup";
 import { FormPurchasesPage, ListPurchasesPage } from "../pages/Purchase";
 import { FormCheckPage, ListChecksPage } from "../pages/Checks";
 import { ListChecksControlPage } from "../pages/Checks/ListChecksControl";
+import { ChecksApprovePage } from "../pages/Checks/ChecksApprove";
 
 const AppRoutes = () => {
   const storage = store.getState();
@@ -56,6 +57,12 @@ const AppRoutes = () => {
           path="/checks-control"
           element={
             loggedIn ? <ListChecksControlPage /> : <Navigate replace to="/" />
+          }
+        />
+        <Route
+          path="/checks-approve"
+          element={
+            loggedIn ? <ChecksApprovePage /> : <Navigate replace to="/" />
           }
         />
       </Routes>
