@@ -23,6 +23,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { find, update } from "../../../store/modules/check/actions";
+import { incrementBalance } from "../../../store/modules/user/actions";
 
 const UserDetailsContainer = styled(Box)`
   padding: 20px;
@@ -59,6 +60,7 @@ export function ChecksApprovePage() {
 
   const handleAcceptButton = () => {
     if (params.id) {
+      dispatch(incrementBalance({ id: item.user.id, balance: item.amount }));
       dispatch(update({ id: parseInt(params.id), status: "accepted" }));
     }
   };
