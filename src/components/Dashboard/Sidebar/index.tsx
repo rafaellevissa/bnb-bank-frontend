@@ -5,8 +5,23 @@ import LogOut from "../Logout";
 
 import { DrawerProps } from "./types";
 import { CustomDrawer } from "./styles";
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 export default function SideBar(props: DrawerProps) {
+  const { item } = useSelector<any, any>((item) => item.auth);
+
+  const permissions = useMemo(() => {
+    if (!Array.isArray(item?.permissions)) {
+      return [];
+    }
+
+    return item?.permissions.map((permission: any) => permission.name);
+  }, [item]);
+
+  const can = (targetPermission: string) =>
+    permissions.find((permission: string) => permission === targetPermission);
+
   return (
     <CustomDrawer width={props.width} variant="permanent" anchor="left">
       <Toolbar sx={{ alignItems: "center" }}>
@@ -16,25 +31,38 @@ export default function SideBar(props: DrawerProps) {
       </Toolbar>
       <Divider />
       <List>
-        <ListItemLink to="/" primary="Balance" icon={<Balance />} isCollapsed />
-        <ListItemLink
-          to="/purchases"
-          primary="Expenses"
-          icon={<ShoppingBasket />}
-          isCollapsed
-        />
-        <ListItemLink
-          to="/checks"
-          primary="Checks"
-          icon={<Savings />}
-          isCollapsed
-        />
-        <ListItemLink
-          to="/checks-control"
-          primary="Checks"
-          icon={<Savings />}
-          isCollapsed
-        />
+        {can("transactions.view") && (
+          <ListItemLink
+            to="/"
+            primary="Balance"
+            icon={<Balance />}
+            isCollapsed
+          />
+        )}
+        {can("purchase.view") && (
+          <ListItemLink
+            to="/purchases"
+            primary="Expenses"
+            icon={<ShoppingBasket />}
+            isCollapsed
+          />
+        )}
+        {can("checks.view") && (
+          <ListItemLink
+            to="/checks"
+            primary="Checks"
+            icon={<Savings />}
+            isCollapsed
+          />
+        )}
+        {can("checks.list") && (
+          <ListItemLink
+            to="/checks-control"
+            primary="Checks"
+            icon={<Savings />}
+            isCollapsed
+          />
+        )}
       </List>
       <Divider />
       <Toolbar sx={{ flexGrow: 1 }} />

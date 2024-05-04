@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import { ActionTypes } from "./consts";
 import api from "../../../services/api";
+import toast from "react-hot-toast";
 
 export function* find({ payload }: Action): Generator {
   try {
@@ -21,6 +22,11 @@ export function* find({ payload }: Action): Generator {
       payload: data,
     });
   } catch (failed) {
+    const message =
+      (failed as any)?.response?.data?.error?.message ??
+      "Operation failed. Please try again later or contact the administrator.";
+    toast.error(message);
+
     yield put({
       type: ActionTypes.CHECK_FIND_FAILURE,
       payload: null,
@@ -45,6 +51,11 @@ export function* list(): Generator {
       payload: data,
     });
   } catch (failed) {
+    const message =
+      (failed as any)?.response?.data?.error?.message ??
+      "Operation failed. Please try again later or contact the administrator.";
+    toast.error(message);
+
     yield put({
       type: ActionTypes.CHECK_LIST_FAILURE,
       payload: null,
@@ -69,6 +80,11 @@ export function* listControl(): Generator {
       payload: data,
     });
   } catch (failed) {
+    const message =
+      (failed as any)?.response?.data?.error?.message ??
+      "Operation failed. Please try again later or contact the administrator.";
+    toast.error(message);
+
     yield put({
       type: ActionTypes.CHECK_LIST_CONTROL_FAILURE,
       payload: null,
@@ -88,11 +104,18 @@ export function* store({ payload }: Action): Generator {
       throw response;
     }
 
+    toast.success("The record has been successfully saved.");
+
     yield put({
       type: ActionTypes.CHECK_DEPOSIT_SUCCESS,
       payload: data,
     });
   } catch (failed) {
+    const message =
+      (failed as any)?.response?.data?.error?.message ??
+      "Operation failed. Please try again later or contact the administrator.";
+    toast.error(message);
+
     yield put({
       type: ActionTypes.CHECK_DEPOSIT_FAILURE,
       payload: null,
@@ -117,6 +140,11 @@ export function* update({ payload }: Action): Generator {
       payload: data,
     });
   } catch (failed) {
+    const message =
+      (failed as any)?.response?.data?.error?.message ??
+      "Operation failed. Please try again later or contact the administrator.";
+    toast.error(message);
+
     yield put({
       type: ActionTypes.CHECK_UPDATE_FAILURE,
       payload: null,

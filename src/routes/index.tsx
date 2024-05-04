@@ -10,21 +10,24 @@ import { ChecksApprovePage } from "../pages/Checks/ChecksApprove";
 
 const AppRoutes = () => {
   const storage = store.getState();
-  const loggedIn = storage.auth.item;
+  const loggedIn = !!storage?.auth?.item;
+  const permissions = storage?.auth?.item?.permissions;
+
+  const can = (targetPermission: string) =>
+    permissions.find((permission: any) => permission.name === targetPermission);
+
+  const HomePage = () => {
+    if (can("checks.list")) {
+      return <ListChecksControlPage />;
+    }
+
+    return <ListTransactionsPage />;
+  };
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            loggedIn ? (
-              <ListTransactionsPage />
-            ) : (
-              <Navigate replace to="/login" />
-            )
-          }
-        />
+        <Route path="/" element={!loggedIn ? <LoginPage /> : <HomePage />} />
         <Route
           path="/login"
           element={!loggedIn ? <LoginPage /> : <Navigate replace to="/" />}

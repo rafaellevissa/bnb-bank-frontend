@@ -6,15 +6,17 @@ import {
   Paper,
   TextField,
   Typography,
+  Snackbar,
 } from "@mui/material";
 import { Field, Form, Formik, FormikConfig, FormikValues } from "formik";
 import { Signup } from "../../../store/modules/auth/types";
 import { signupSchema } from "./validator";
 import { signup } from "../../../store/modules/auth/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const SignupPage = () => {
   const dispatch = useDispatch();
+  const { error } = useSelector<any, any>((item) => item.auth);
 
   const handleSubmit = (payload: FormikValues) => {
     const form = payload as Signup;
@@ -133,6 +135,7 @@ export const SignupPage = () => {
           </Form>
         )}
       </Formik>
+      <Snackbar open={error} autoHideDuration={300} />
     </Box>
   );
 };

@@ -1,9 +1,7 @@
-import {
-  login,
-  logout,
-} from './actions';
+import { login, logout, signup } from "./actions";
 
 export default {
   login,
   logout,
+  signup,
 };

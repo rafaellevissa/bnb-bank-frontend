@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { t } from "i18next";
 import storage from "redux-persist/lib/storage";
 import { store } from "../store";
 
@@ -31,8 +30,8 @@ api.interceptors.response.use(
     const { getState }: any = store;
     const auth = getState().auth.item;
 
-    if (error.response?.status === 401 && auth?.authorization.token) {
-      alert(t("ERROR:EXPIRED_SESSION"));
+    if (error.response?.status === 401 && auth?.authorization?.token) {
+      alert("Your session expired!");
 
       storage.removeItem("persist:@reactjschallenge");
       window.location.reload();

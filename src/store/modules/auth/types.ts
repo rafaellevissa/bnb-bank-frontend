@@ -12,10 +12,20 @@ export interface ActionTypesBase {
   LOGOUT_FAILURE: string;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  balance: number;
+}
+
 export interface Auth {
-  type: string;
-  token: string;
-  expires_at: string;
+  user: User;
+  autorization: {
+    type: string;
+    token: string;
+    expires_at: string;
+  };
 }
 
 export interface Login {

@@ -4,6 +4,7 @@ import { all, call, put, takeLatest } from "redux-saga/effects";
 import { ActionTypes } from "./consts";
 import api from "../../../services/api";
 import storage from "redux-persist/lib/storage";
+import toast from "react-hot-toast";
 
 export function* login({ payload }: Action): Generator {
   try {
@@ -22,6 +23,7 @@ export function* login({ payload }: Action): Generator {
 
     window.location.reload();
   } catch (failed) {
+    toast.error("Login failed. Please check the provided credentials.");
     yield put({
       type: ActionTypes.LOGIN_FAILURE,
       payload: null,
@@ -50,6 +52,9 @@ export function* signup({ payload }: Action): Generator {
 
     window.location.reload();
   } catch (failed) {
+    toast.error(
+      "Registration failed. Please check the provided information and try again later."
+    );
     yield put({
       type: ActionTypes.SIGNUP_FAILURE,
       payload: null,
@@ -63,6 +68,7 @@ export function* logout(): Generator {
 
     yield put({ type: ActionTypes.LOGOUT_SUCCESS });
   } catch (failed) {
+    toast.error("Logout failed. Please contact the system administrator.");
     yield put({ type: ActionTypes.LOGOUT_FAILURE });
   }
 }

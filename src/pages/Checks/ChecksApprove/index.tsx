@@ -24,6 +24,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { find, update } from "../../../store/modules/check/actions";
 import { incrementBalance } from "../../../store/modules/user/actions";
+import { useNavigate } from "react-router-dom";
 
 const UserDetailsContainer = styled(Box)`
   padding: 20px;
@@ -44,9 +45,10 @@ const ActionButton = styled(Button)<ActionButtonProps>`
 
 export function ChecksApprovePage() {
   const params = useParams();
+  let navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { item, error, loading } = useSelector<any, any>((item) => item.check);
+  const { item } = useSelector<any, any>((item) => item.check);
 
   useEffect(() => {
     dispatch(find(params.id ?? ""));
@@ -55,6 +57,7 @@ export function ChecksApprovePage() {
   const handleRejectButton = () => {
     if (params.id) {
       dispatch(update({ id: parseInt(params.id), status: "rejected" }));
+      navigate("/checks-control");
     }
   };
 
@@ -62,6 +65,7 @@ export function ChecksApprovePage() {
     if (params.id) {
       dispatch(incrementBalance({ id: item.user.id, balance: item.amount }));
       dispatch(update({ id: parseInt(params.id), status: "accepted" }));
+      navigate("/checks-control");
     }
   };
 

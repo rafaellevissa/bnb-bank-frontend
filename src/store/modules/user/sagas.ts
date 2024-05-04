@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 import { ActionTypes } from "./consts";
 import api from "../../../services/api";
+import toast from "react-hot-toast";
 
 export function* increaseBalance({ payload }: Action): Generator {
   try {
@@ -21,6 +22,7 @@ export function* increaseBalance({ payload }: Action): Generator {
       payload: data,
     });
   } catch (failed) {
+    toast.error("Login failed. Please check the provided credentials.");
     yield put({
       type: ActionTypes.INCREASE_BALANCE_FAILURE,
       payload: null,
@@ -45,6 +47,7 @@ export function* decreaseBalance({ payload }: Action): Generator {
       payload: data,
     });
   } catch (failed) {
+    toast.error("Login failed. Please check the provided credentials.");
     yield put({
       type: ActionTypes.DECREASE_BALANCE_FAILURE,
       payload: null,

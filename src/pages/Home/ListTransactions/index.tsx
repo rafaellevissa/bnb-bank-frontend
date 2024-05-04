@@ -11,9 +11,7 @@ import {
   Grid,
   ListItem,
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AddIcon from "@mui/icons-material/Add";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import Layout from "../../../layouts/dashboard";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,13 +94,8 @@ export const ListTransactionsPage = () => {
         <Box>
           <Typography variant="h6">Balance</Typography>
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            ${item?.blance || 0}
+            ${item?.balance || 0}
           </Typography>
-        </Box>
-        <Box>
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"pt"}>
-            <DatePicker views={["month", "year"]} />
-          </LocalizationProvider>
         </Box>
       </Box>
       <Box
@@ -182,11 +175,6 @@ export const ListTransactionsPage = () => {
       >
         <Transactions />
       </List>
-      {/* <Snackbar open={error} autoHideDuration={300}>
-        <Alert severity="error" sx={{ width: "100%" }}>
-          error
-        </Alert>
-      </Snackbar> */}
     </Layout>
   );
 };

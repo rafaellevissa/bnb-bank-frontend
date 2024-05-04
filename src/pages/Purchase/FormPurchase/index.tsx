@@ -3,66 +3,96 @@ import { Grid, TextField, Button, Container } from "@mui/material";
 import Layout from "../../../layouts/dashboard";
 
 import { useDispatch } from "react-redux";
-import { Field, FieldProps, Form, Formik } from "formik";
+import {
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikConfig,
+  FormikHelpers,
+  FormikValues,
+} from "formik";
 import { store } from "../../../store/modules/purchase/actions";
+import { purchaseSchema } from "./validator";
 
 export const FormPurchasesPage = () => {
   const dispatch = useDispatch();
 
-  const initialValues = {
-    amount: 0,
-    date: "",
-    description: "",
-  } as any;
-
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (
+    values: FormikValues,
+    { resetForm }: FormikHelpers<FormikValues>
+  ) => {
     dispatch(store(values));
+
+    resetForm();
+  };
+
+  const formikConfig: FormikConfig<FormikValues> = {
+    initialValues: {
+      amount: "",
+      description: "",
+      date: "",
+    },
+    validationSchema: purchaseSchema,
+    onSubmit: handleSubmit,
   };
 
   return (
     <Layout>
       <Container sx={{ mt: 2 }}>
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-          {() => (
-            <Form>
+        <Formik {...formikConfig}>
+          {({ handleSubmit, errors, setFieldValue, values }) => (
+            <Form onSubmit={handleSubmit}>
               <Grid container spacing={2} direction="column">
                 <Grid item>
-                  <Field name="amount">
-                    {({ field }: FieldProps<any>) => (
-                      <TextField
-                        {...field}
-                        label="Amount"
-                        type="number"
-                        fullWidth
-                        required
-                      />
-                    )}
-                  </Field>
+                  <Field
+                    label="Amount"
+                    name="amount"
+                    value={values.amount}
+                    type="number"
+                    fullWidth
+                    component={TextField}
+                    helperText={errors?.amount}
+                    error={errors?.amount}
+                    onChange={({
+                      target,
+                    }: React.ChangeEvent<HTMLInputElement>) =>
+                      setFieldValue("amount", target.value)
+                    }
+                  />
                 </Grid>
                 <Grid item>
-                  <Field name="date">
-                    {({ field }: FieldProps<any>) => (
-                      <TextField
-                        {...field}
-                        label="Date"
-                        type="date"
-                        fullWidth
-                        required
-                      />
-                    )}
-                  </Field>
+                  <Field
+                    type="date"
+                    name="date"
+                    component={TextField}
+                    value={values.date}
+                    fullWidth
+                    helperText={errors?.date}
+                    error={errors?.date}
+                    onChange={({
+                      target,
+                    }: React.ChangeEvent<HTMLInputElement>) =>
+                      setFieldValue("date", target.value)
+                    }
+                  />
                 </Grid>
                 <Grid item>
-                  <Field name="description">
-                    {({ field }: FieldProps<any>) => (
-                      <TextField
-                        {...field}
-                        label="Description"
-                        fullWidth
-                        required
-                      />
-                    )}
-                  </Field>
+                  <Field
+                    type="text"
+                    name="description"
+                    component={TextField}
+                    label="Description"
+                    value={values.description}
+                    fullWidth
+                    helperText={errors?.description}
+                    error={errors?.description}
+                    onChange={({
+                      target,
+                    }: React.ChangeEvent<HTMLInputElement>) =>
+                      setFieldValue("description", target.value)
+                    }
+                  />
                 </Grid>
                 <Grid item>
                   <Button type="submit" variant="contained" color="primary">
